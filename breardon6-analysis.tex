@@ -1,0 +1,48 @@
+\documentclass{article}
+
+% Environment setup
+
+\usepackage[
+    margin=1in
+]{geometry} %geometry (sets margin) and other useful packages 
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{.75em}
+
+\usepackage{graphicx}
+\usepackage{grffile}  % support extra dots in filenames
+\usepackage{fancyref}
+\usepackage[labelfont=bf]{caption}
+\usepackage{subcaption}
+
+
+\title{\textbf{CS 4641:} Randomized Optimization}
+\author{Bradley Reardon}
+\date{March 3, 2019}
+
+\begin{document}
+  \maketitle
+
+  \section{Introduction}
+  The purpose of this assignment is to evaluate various random search algorithms. Namely, the algorithms of interest that will be explored in this report are: randomized hill climbing, simulated annealing, genetic algorithms, and MIMIC.
+
+  The first part of this report will focus on using the breast cancer dataset that was used for the previous assignment regarding supervised learning, along with the various search algorithms being used to optimize the weights for a neural network.
+
+  The second part of the report will focus on distinguishing the strengths of each algorithm by applying each in the context of various optimization problems. \textbf{TODO optimization problems} 
+
+  \subsection{Breast Cancer Wisconsin data set}
+  The Breast Cancer Wisconsin data set was donated to the UCI Machine Learning Repository in 1992, and contains data from one doctor's clinical cases, gathered from January 1989 to November 1991. In total, there are 699 instances signifying information about breast tumors such as clump thickness, uniformity in shape and size, and other screening factors. Data points are identified by two classes -- benign or malignant. The features of the data points are encoded as 9 continuous attributes rating the screening factor from 1 to 10.
+
+  This data set contains unknowns in the form of question marks in the data. To deal with this, missing values were imputed, calculating missing data points based on the mean of other points in the specific column of the missing attribute. 
+
+  The problem at hand for this data set is determining whether a tumor is benign or malignant based on tumor screening characteristics identified in the data set.
+
+  \textbf{Source:} https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\%28Original\%29
+
+    
+
+\end{document}
