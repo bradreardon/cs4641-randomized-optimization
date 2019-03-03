@@ -268,7 +268,7 @@
     \subsection{Genetic Algorithm: Traveling Salesman}
       The traveling salesman problem is an NP-hard problem that deals with the problem of a salesman traveling from city to city, and returning to their origin city. The goal is to find the shortest route to do so, given a list of cities and the distances between them. The metaphor for this problem extends to many real-world applications, especially in the area of logistics, making it a very interesting problem in the area of optimization.
 
-      \Fref{tab:ts-params} shows the parameters used for each algorithm.
+      \Fref{tab:ts-params} shows the parameters used for each algorithm. The algorithm was run on a graph of 50 nodes.
 
       \begin{table}[h!]
       \centering
@@ -299,38 +299,8 @@
 
       Not only does the genetic algorithm have the best fitness, but it also reaches maximum fitness quickly. For this reason, the genetic algorithm is best suited for the traveling salesman problem.
 
-    \subsection{Simulated Annealing: Flip Flop}
-      TODO algo talk
-
-      \Fref{tab:ff-params} shows the parameters used for each algorithm.
-
-      \begin{table}[h!]
-      \centering
-        \begin{tabular}{||c|c||}\hline
-          \textbf{Algorithm} & \textbf{Parameters} \\ \hline
-          Randomized Hill Climbing & N/A \\ \hline
-          Simulated Annealing & temperature=\num{1e11}, cooling\_rate=.95 \\ \hline
-          Genetic Algorithm & population=200, mate=100, mutate=10 \\ \hline
-          MIMIC & samples=200, keep=20 \\ \hline
-        \end{tabular}
-
-        \caption{Parameters used for the flip flop problem}
-        \label{tab:ff-params}
-      \end{table}
-
-      \Fref{fig:fitness-ff}
-
-      \begin{figure}[htb]
-      \centering
-      \includegraphics[width=.5\linewidth]{out/op/flipflop/fitness.png}
-      \caption{Fitness curve for the flip flop problem, for various algorithms.}
-      \label{fig:fitness-ff}
-      \end{figure}
-
-      TODO but why?
-
     \subsection{MIMIC: Four Peaks}
-      TODO algo talk
+      The four peaks problem is not useful in practice, but rather is great for testing various optimization algorithms. The problem's fitness function has four optima (or ``peaks'') in total: two local optima, and two global optima on the edges of the problem space. Because of this, the four peaks problem intentionally does not work well with hill-climbing algorithms like randomized hill climbing and simulated annealing.
 
       \Fref{tab:fp-params} shows the parameters used for each algorithm.
 
@@ -348,7 +318,7 @@
         \label{tab:fp-params}
       \end{table}
 
-      \Fref{fig:fitness-fp}
+      \Fref{fig:fitness-fp} shows the fitness curve for the four peaks problem, comparing the fitness over 5000 iterations for all four algorithms.
 
       \begin{figure}[htb]
       \centering
@@ -357,7 +327,37 @@
       \label{fig:fitness-fp}
       \end{figure}
 
-      TODO but why?
+      Unsurprisingly, randomized hill climbing and simulated annealing fail to impress for the four peaks problem. Genetic algorithms, interestingly, don't optimize the problem well either. MIMIC works particularly well for this problem space, as it samples the problem space uniformly in order to find candidates for maximum fitness, rather than localizing to a single maximum.
+
+    \subsection{Simulated Annealing: Flip Flop}
+      The flip flop problem is relatively simple. The fitness evaluation function for this optimization problem has an input of bitstrings, and returns the number of times that digits alternate in the input string. Therefore, a global maximum on the fitness function would ideally be a string such as "10101010" which is entirely composed of alternating digits.
+
+      \Fref{tab:ff-params} shows the parameters used for each algorithm. The flip flop problem was evaluated with 80-length bitstrings.
+
+      \begin{table}[h!]
+      \centering
+        \begin{tabular}{||c|c||}\hline
+          \textbf{Algorithm} & \textbf{Parameters} \\ \hline
+          Randomized Hill Climbing & N/A \\ \hline
+          Simulated Annealing & temperature=\num{1e11}, cooling\_rate=.95 \\ \hline
+          Genetic Algorithm & population=200, mate=100, mutate=10 \\ \hline
+          MIMIC & samples=200, keep=20 \\ \hline
+        \end{tabular}
+
+        \caption{Parameters used for the flip flop problem}
+        \label{tab:ff-params}
+      \end{table}
+
+      \Fref{fig:fitness-ff} shows the fitness curve for the flip flop problem, comparing the fitness of the four algorithms over 5000 iterations.
+
+      \begin{figure}[htb]
+      \centering
+      \includegraphics[width=.5\linewidth]{out/op/flipflop/fitness.png}
+      \caption{Fitness curve for the flip flop problem, for various algorithms.}
+      \label{fig:fitness-ff}
+      \end{figure}
+
+      TODO but why did SA do well?
 
     \subsection{Discussion}
       TODO
