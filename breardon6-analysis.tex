@@ -47,6 +47,28 @@
 
   \subsection{Random Hill Climbing}
 
+  \Fref{fig:rhc-params} shows the training and test error curves for the cancer data sets using randomized hill climbing for weight optimization. Each bar represents the training and test error at iteration \#1000 for varying numbers of restarts.
+
+  \begin{figure}[htb]
+  \centering
+
+  \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=\linewidth]{out/rhc/restarts-training.png}
+    \caption{Training error}
+    \label{fig:rhc-params-1}
+  \end{subfigure}\hfil
+  \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=\linewidth]{out/rhc/restarts-testing.png}
+    \caption{Testing error}
+    \label{fig:rhc-params-2}
+  \end{subfigure}
+
+  \caption{Learning curves for randomized hill climbing with varying restarts.}
+  \label{fig:rhc-params}
+  \end{figure}
+
+  TODO TODO
+
   \Fref{fig:rhc-learning} shows the learning curves for the cancer data set, using randomized hill climbing with no restarts.
 
   \begin{figure}[htb]
@@ -58,7 +80,7 @@
 
   \subsection{Simulated Annealing}
 
-  \Fref{fig:sa-params} shows the training and test error curves for the cancer data sets using simulated annealing for weight optimization. The different series in the figure represent different cooling rates.
+  \Fref{fig:sa-params} shows the training and test error curves for the cancer data set using simulated annealing for weight optimization. The different series in the figure represent different cooling rates.
 
   \begin{figure}[htb]
   \centering
