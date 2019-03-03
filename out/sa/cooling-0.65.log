@@ -1,0 +1,8 @@
+
+[SA] cooling=0.65
+Results for SA: 
+Correctly classified 130 instances.
+Incorrectly classified 7 instances.
+Percent correctly classified: 94.891%
+Training time: 8.134 seconds
+Testing time: 0.000 seconds

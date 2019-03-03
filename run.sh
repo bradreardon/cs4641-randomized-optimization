@@ -6,8 +6,11 @@ mkdir -p out/{error,log,plot,rhc,sa,ga}
 # echo "test neural nets"
 # jython randomized_optimization/nn_test_cancer.py
 
-echo "test RHC restarts"
-jython randomized_optimization/rhc_cancer_restarts.py
+# echo "test RHC restarts"
+# jython randomized_optimization/rhc_cancer_restarts.py
+
+echo "test SA cooling"
+jython randomized_optimization/sa_cancer_cooling.py
 
 # echo "plotting"
 # python plot.py "Randomized Hill Climbing" out/error/RHC.csv out/plot/RHC.png

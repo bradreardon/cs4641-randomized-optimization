@@ -43,6 +43,82 @@
 
   \textbf{Source:} https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\%28Original\%29
 
+  \section{Optimizing Neural Network Weights}
+
+  \subsection{Random Hill Climbing}
+
+  \Fref{fig:rhc-learning} shows the learning curves for the cancer data set, using randomized hill climbing with no restarts.
+
+  \begin{figure}[htb]
+  \centering
+  \includegraphics[width=.5\linewidth]{out/plot/RHC.png}
+  \caption{Learning curve for random hill climbing.}
+  \label{fig:rhc-learning}
+  \end{figure}
+
+  \subsection{Simulated Annealing}
+
+  \Fref{fig:sa-params} shows the training and test error curves for the cancer data sets using simulated annealing for weight optimization. The different series in the figure represent different cooling rates.
+
+  \begin{figure}[htb]
+  \centering
+
+  \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=\linewidth]{out/sa/cooling-error-training.png}
+    \caption{Training error}
+    \label{fig:sa-params-1}
+  \end{subfigure}\hfil
+  \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=\linewidth]{out/sa/cooling-error-testing.png}
+    \caption{Testing error}
+    \label{fig:sa-params-2}
+  \end{subfigure}
+
+  \caption{Learning curves for simulated annealing with different cooling rates.}
+  \label{fig:sa-params}
+  \end{figure}
+
+  TODO TODO
+
+  \Fref{fig:sa-learning} shows the learning curves for the cancer data set using simulated annealing.
+
+  \begin{figure}[htb]
+  \centering
+  \includegraphics[width=.5\linewidth]{out/plot/SA.png}
+  \caption{Learning curve for simulated annealing.}
+  \label{fig:sa-learning}
+  \end{figure}
+
+  \subsection{Genetic Algorithms}
+
+  \Fref{fig:ga-learning} shows the learning curves for the cancer data set using genetic algorithms.
+
+  \begin{figure}[htb]
+  \centering
+  \includegraphics[width=.5\linewidth]{out/plot/GA.png}
+  \caption{Learning curve for genetic algorithms.}
+  \label{fig:ga-learning}
+  \end{figure}
+
+  \subsection{Comparison}
+
+  \section{Exploring Optimization Problems}
+
+  Blah blah here are the ones I chose
+
+  \subsection{Simulated Annealing}
+  Here's a problem good with SA
+
+  \subsection{Genetic Algorithms}
+  Here's a problem good with GA
+
+  \subsection{MIMIC}
+  Here's a problem good with MIMIC
+
+  \section{Discussion}
+
+  \section{Conclusion}
+
 
 
 \end{document}
