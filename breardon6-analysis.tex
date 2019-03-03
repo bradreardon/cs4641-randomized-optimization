@@ -293,7 +293,11 @@
       \label{fig:fitness-ts}
       \end{figure}
 
-      The genetic algorithm quickly reaches a limit of maximum fitness that majorly outperforms MIMIC and simulated annealing for the traveling salesman problem.
+      The genetic algorithm quickly reaches a limit of maximum fitness that majorly outperforms MIMIC and simulated annealing for the traveling salesman problem. As the traveling salesman problem is NP-hard, the computational time required to calculate solutions is massive.
+
+      Because of the non-deterministic and evolutionary properties of the genetic algorithm, the traveling salesman problem is able to be optimized relatively quickly. Because genetic algorithms model the idea of ``survival of the fittest'', it makes sense that over a few generations, the genetic algorithm would begin to converge on a shortest path based on random mutation and fitness alone.
+
+      Not only does the genetic algorithm have the best fitness, but it also reaches maximum fitness quickly. For this reason, the genetic algorithm is best suited for the traveling salesman problem.
 
     \subsection{Simulated Annealing: Flip Flop}
       TODO algo talk
@@ -323,6 +327,8 @@
       \label{fig:fitness-ff}
       \end{figure}
 
+      TODO but why?
+
     \subsection{MIMIC: Four Peaks}
       TODO algo talk
 
@@ -350,6 +356,8 @@
       \caption{Fitness curve for the four peaks problem, for various algorithms.}
       \label{fig:fitness-fp}
       \end{figure}
+
+      TODO but why?
 
     \subsection{Discussion}
       TODO
