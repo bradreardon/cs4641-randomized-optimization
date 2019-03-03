@@ -47,6 +47,8 @@ T=N/5
 fill = [2] * N
 ranges = array('i', fill)
 
+ITERATIONS = 5000
+
 ef = FourPeaksEvaluationFunction(T)
 odd = DiscreteUniformDistribution(ranges)
 nf = DiscreteChangeOneNeighbor(ranges)
@@ -58,21 +60,34 @@ gap = GenericGeneticAlgorithmProblem(ef, odd, mf, cf)
 pop = GenericProbabilisticOptimizationProblem(ef, odd, df)
 
 rhc = RandomizedHillClimbing(hcp)
-fit = FixedIterationTrainer(rhc, 200000)
-fit.train()
-print "RHC: " + str(ef.value(rhc.getOptimal()))
-
 sa = SimulatedAnnealing(1E11, .95, hcp)
-fit = FixedIterationTrainer(sa, 200000)
-fit.train()
-print "SA: " + str(ef.value(sa.getOptimal()))
-
 ga = StandardGeneticAlgorithm(200, 100, 10, gap)
-fit = FixedIterationTrainer(ga, 1000)
-fit.train()
-print "GA: " + str(ef.value(ga.getOptimal()))
-
 mimic = MIMIC(200, 20, pop)
-fit = FixedIterationTrainer(mimic, 1000)
-fit.train()
-print "MIMIC: " + str(ef.value(mimic.getOptimal()))
+
+rhc_f = open('out/op/fourpeaks/rhc.csv', 'w')
+sa_f = open('out/op/fourpeaks/sa.csv', 'w')
+ga_f = open('out/op/fourpeaks/ga.csv', 'w')
+mimic_f = open('out/op/fourpeaks/mimic.csv', 'w')
+
+for i in range(ITERATIONS):
+    rhc.train()
+    rhc_fitness = ef.value(rhc.getOptimal())
+    rhc_f.write('{},{}\n'.format(i, rhc_fitness))
+
+    sa.train()
+    sa_fitness = ef.value(sa.getOptimal())
+    sa_f.write('{},{}\n'.format(i, sa_fitness))
+
+    ga.train()
+    ga_fitness = ef.value(ga.getOptimal())
+    ga_f.write('{},{}\n'.format(i, ga_fitness))
+
+    mimic.train()
+    mimic_fitness = ef.value(mimic.getOptimal())
+    mimic_f.write('{},{}\n'.format(i, mimic_fitness))
+
+rhc_f.close()
+sa_f.close()
+ga_f.close()
+mimic_f.close()
+

@@ -19,7 +19,7 @@ import opt.HillClimbingProblem as HillClimbingProblem
 import opt.NeighborFunction as NeighborFunction
 import opt.RandomizedHillClimbing as RandomizedHillClimbing
 import opt.SimulatedAnnealing as SimulatedAnnealing
-import opt.example.FourPeaksEvaluationFunction as FourPeaksEvaluationFunction
+import opt.example.FlipFlopEvaluationFunction as FlipFlopEvaluationFunction
 import opt.ga.CrossoverFunction as CrossoverFunction
 import opt.ga.SingleCrossOver as SingleCrossOver
 import opt.ga.DiscreteChangeOneMutation as DiscreteChangeOneMutation
@@ -32,73 +32,62 @@ import opt.prob.GenericProbabilisticOptimizationProblem as GenericProbabilisticO
 import opt.prob.MIMIC as MIMIC
 import opt.prob.ProbabilisticOptimizationProblem as ProbabilisticOptimizationProblem
 import shared.FixedIterationTrainer as FixedIterationTrainer
-import opt.example.KnapsackEvaluationFunction as KnapsackEvaluationFunction
-from array import array
 
+from array import array
 
 
 
 """
 Commandline parameter(s):
-    none
+   none
 """
 
-# Random number generator */
-random = Random()
-# The number of items
-NUM_ITEMS = 40
-# The number of copies each
-COPIES_EACH = 4
-# The maximum weight for a single element
-MAX_WEIGHT = 50
-# The maximum volume for a single element
-MAX_VOLUME = 50
-# The volume of the knapsack 
-KNAPSACK_VOLUME = MAX_VOLUME * NUM_ITEMS * COPIES_EACH * .4
+N=80
 
-# create copies
-fill = [COPIES_EACH] * NUM_ITEMS
-copies = array('i', fill)
-
-# create weights and volumes
-fill = [0] * NUM_ITEMS
-weights = array('d', fill)
-volumes = array('d', fill)
-for i in range(0, NUM_ITEMS):
-    weights[i] = random.nextDouble() * MAX_WEIGHT
-    volumes[i] = random.nextDouble() * MAX_VOLUME
-
-
-# create range
-fill = [COPIES_EACH + 1] * NUM_ITEMS
+fill = [2] * N
 ranges = array('i', fill)
 
-ef = KnapsackEvaluationFunction(weights, volumes, KNAPSACK_VOLUME, copies)
+ITERATIONS = 5000
+
+ef = FlipFlopEvaluationFunction()
 odd = DiscreteUniformDistribution(ranges)
 nf = DiscreteChangeOneNeighbor(ranges)
 mf = DiscreteChangeOneMutation(ranges)
-cf = UniformCrossOver()
+cf = SingleCrossOver()
 df = DiscreteDependencyTree(.1, ranges)
 hcp = GenericHillClimbingProblem(ef, odd, nf)
 gap = GenericGeneticAlgorithmProblem(ef, odd, mf, cf)
 pop = GenericProbabilisticOptimizationProblem(ef, odd, df)
 
 rhc = RandomizedHillClimbing(hcp)
-fit = FixedIterationTrainer(rhc, 200000)
-fit.train()
-print "RHC: " + str(ef.value(rhc.getOptimal()))
+sa = SimulatedAnnealing(1E11, .95, hcp)
+ga = StandardGeneticAlgorithm(200, 100, 10, gap)
+mimic = MIMIC(200, 20, pop)
 
-sa = SimulatedAnnealing(100, .95, hcp)
-fit = FixedIterationTrainer(sa, 200000)
-fit.train()
-print "SA: " + str(ef.value(sa.getOptimal()))
+rhc_f = open('out/op/flipflop/rhc.csv', 'w')
+sa_f = open('out/op/flipflop/sa.csv', 'w')
+ga_f = open('out/op/flipflop/ga.csv', 'w')
+mimic_f = open('out/op/flipflop/mimic.csv', 'w')
 
-ga = StandardGeneticAlgorithm(200, 150, 25, gap)
-fit = FixedIterationTrainer(ga, 1000)
-fit.train()
-print "GA: " + str(ef.value(ga.getOptimal()))
+for i in range(ITERATIONS):
+    rhc.train()
+    rhc_fitness = ef.value(rhc.getOptimal())
+    rhc_f.write('{},{}\n'.format(i, rhc_fitness))
 
-mimic = MIMIC(200, 100, pop)
-fit = FixedIterationTrainer(mimic, 1000)
-fit.train()
-print "MIMIC: " + str(ef.value(mimic.getOptimal()))
+    sa.train()
+    sa_fitness = ef.value(sa.getOptimal())
+    sa_f.write('{},{}\n'.format(i, sa_fitness))
+
+    ga.train()
+    ga_fitness = ef.value(ga.getOptimal())
+    ga_f.write('{},{}\n'.format(i, ga_fitness))
+
+    mimic.train()
+    mimic_fitness = ef.value(mimic.getOptimal())
+    mimic_f.write('{},{}\n'.format(i, mimic_fitness))
+
+rhc_f.close()
+sa_f.close()
+ga_f.close()
+mimic_f.close()
+

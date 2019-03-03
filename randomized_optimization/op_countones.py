@@ -1,7 +1,3 @@
-# traveling salesman algorithm implementation in jython
-# This also prints the index of the points of the shortest route.
-# To make a plot of the route, write the points at these indexes 
-# to a file and plot them in your favorite tool.
 import sys
 import os
 import time
@@ -16,7 +12,6 @@ import java.util.Random as Random
 import dist.DiscreteDependencyTree as DiscreteDependencyTree
 import dist.DiscreteUniformDistribution as DiscreteUniformDistribution
 import dist.Distribution as Distribution
-import dist.DiscretePermutationDistribution as DiscretePermutationDistribution
 import opt.DiscreteChangeOneNeighbor as DiscreteChangeOneNeighbor
 import opt.EvaluationFunction as EvaluationFunction
 import opt.GenericHillClimbingProblem as GenericHillClimbingProblem
@@ -37,52 +32,35 @@ import opt.prob.GenericProbabilisticOptimizationProblem as GenericProbabilisticO
 import opt.prob.MIMIC as MIMIC
 import opt.prob.ProbabilisticOptimizationProblem as ProbabilisticOptimizationProblem
 import shared.FixedIterationTrainer as FixedIterationTrainer
-import opt.example.TravelingSalesmanEvaluationFunction as TravelingSalesmanEvaluationFunction
-import opt.example.TravelingSalesmanRouteEvaluationFunction as TravelingSalesmanRouteEvaluationFunction
-import opt.SwapNeighbor as SwapNeighbor
-import opt.ga.SwapMutation as SwapMutation
-import opt.example.TravelingSalesmanCrossOver as TravelingSalesmanCrossOver
-import opt.example.TravelingSalesmanSortEvaluationFunction as TravelingSalesmanSortEvaluationFunction
-import shared.Instance as Instance
-import util.ABAGAILArrays as ABAGAILArrays
-
+import opt.example.CountOnesEvaluationFunction as CountOnesEvaluationFunction
 from array import array
 
 
-
-
-"""
-Commandline parameter(s):
-    none
-"""
-
-# set N value.  This is the number of points
-N = 50
-random = Random()
+N=80
+fill = [2] * N
+ranges = array('i', fill)
 
 ITERATIONS = 5000
 
-points = [[0 for x in xrange(2)] for x in xrange(N)]
-for i in range(0, len(points)):
-    points[i][0] = random.nextDouble()
-    points[i][1] = random.nextDouble()
-
-ef = TravelingSalesmanRouteEvaluationFunction(points)
-odd = DiscretePermutationDistribution(N)
-nf = SwapNeighbor()
-mf = SwapMutation()
-cf = TravelingSalesmanCrossOver(ef)
+ef = CountOnesEvaluationFunction()
+odd = DiscreteUniformDistribution(ranges)
+nf = DiscreteChangeOneNeighbor(ranges)
+mf = DiscreteChangeOneMutation(ranges)
+cf = SingleCrossOver()
+df = DiscreteDependencyTree(.1, ranges)
 hcp = GenericHillClimbingProblem(ef, odd, nf)
 gap = GenericGeneticAlgorithmProblem(ef, odd, mf, cf)
-
+pop = GenericProbabilisticOptimizationProblem(ef, odd, df)
 
 rhc = RandomizedHillClimbing(hcp)
-sa = SimulatedAnnealing(1E12, .999, hcp)
-ga = StandardGeneticAlgorithm(2000, 1500, 250, gap)
+sa = SimulatedAnnealing(100, .95, hcp)
+ga = StandardGeneticAlgorithm(20, 20, 0, gap)
+mimic = MIMIC(50, 10, pop)
 
-rhc_f = open('out/op/salesman/rhc.csv', 'w')
-sa_f = open('out/op/salesman/sa.csv', 'w')
-ga_f = open('out/op/salesman/ga.csv', 'w')
+rhc_f = open('out/op/countones/rhc.csv', 'w')
+sa_f = open('out/op/countones/sa.csv', 'w')
+ga_f = open('out/op/countones/ga.csv', 'w')
+mimic_f = open('out/op/countones/mimic.csv', 'w')
 
 for i in range(ITERATIONS):
     rhc.train()
@@ -97,28 +75,11 @@ for i in range(ITERATIONS):
     ga_fitness = ef.value(ga.getOptimal())
     ga_f.write('{},{}\n'.format(i, ga_fitness))
 
-rhc_f.close()
-sa_f.close()
-ga_f.close()
-
-
-
-
-# for mimic we use a sort encoding
-ef = TravelingSalesmanSortEvaluationFunction(points);
-fill = [N] * N
-ranges = array('i', fill)
-odd = DiscreteUniformDistribution(ranges)
-df = DiscreteDependencyTree(.1, ranges)
-pop = GenericProbabilisticOptimizationProblem(ef, odd, df)
-
-mimic = MIMIC(500, 100, pop)
-
-mimic_f = open('out/op/salesman/mimic.csv', 'w')
-
-for i in range(ITERATIONS):
     mimic.train()
     mimic_fitness = ef.value(mimic.getOptimal())
     mimic_f.write('{},{}\n'.format(i, mimic_fitness))
 
+rhc_f.close()
+sa_f.close()
+ga_f.close()
 mimic_f.close()

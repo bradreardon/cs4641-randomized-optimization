@@ -27,7 +27,7 @@ if __name__ == '__main__':
     plt.savefig('out/ga/mating-training.png')
 
     plt.figure()
-    plt.title(f'Genetic Algorithm: Training Error')
+    plt.title(f'Genetic Algorithm: Testing Error')
     plt.xlabel('Number of iterations')
     plt.ylabel('Error')
 

@@ -1,8 +1,8 @@
 
 [RHC] restarts=8
 Results for RHC: 
-Correctly classified 130 instances.
-Incorrectly classified 7 instances.
-Percent correctly classified: 94.891%
-Training time: 8.636 seconds
-Testing time: 0.001 seconds
+Correctly classified 126 instances.
+Incorrectly classified 11 instances.
+Percent correctly classified: 91.971%
+Training time: 8.474 seconds
+Testing time: 0.000 seconds
