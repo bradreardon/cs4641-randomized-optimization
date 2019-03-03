@@ -1,0 +1,8 @@
+
+[GA] mating=50.00
+Results for GA: 
+Correctly classified 131 instances.
+Incorrectly classified 6 instances.
+Percent correctly classified: 95.620%
+Training time: 22.050 seconds
+Testing time: 0.001 seconds

@@ -1,0 +1,8 @@
+
+[GA] mutation=25.00
+Results for GA: 
+Correctly classified 132 instances.
+Incorrectly classified 5 instances.
+Percent correctly classified: 96.350%
+Training time: 35.038 seconds
+Testing time: 0.001 seconds

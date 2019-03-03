@@ -1,8 +1,8 @@
 
 [SA] hidden_layer=5, iterations=1000
 Results for SA: 
-Correctly classified 114 instances.
-Incorrectly classified 23 instances.
-Percent correctly classified: 83.212%
-Training time: 8.405 seconds
+Correctly classified 130 instances.
+Incorrectly classified 7 instances.
+Percent correctly classified: 94.891%
+Training time: 8.976 seconds
 Testing time: 0.001 seconds

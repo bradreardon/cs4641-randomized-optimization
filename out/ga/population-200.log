@@ -1,0 +1,8 @@
+
+[GA] population=200.00
+Results for GA: 
+Correctly classified 127 instances.
+Incorrectly classified 10 instances.
+Percent correctly classified: 92.701%
+Training time: 34.701 seconds
+Testing time: 0.001 seconds

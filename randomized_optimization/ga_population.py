@@ -30,12 +30,9 @@ OUTPUT_LAYER = 1
 TRAINING_ITERATIONS = 1000
 TRAIN_TEST_SPLIT = 80
 
-SA_START_TEMPERATURE = 1E11
-SA_COOLING = .2
-
-GA_POPULATION_SIZE = 400
 GA_MATE_EACH_GEN = 100
-GA_MUTATE_EACH_GEN = 100
+GA_MUTATE_EACH_GEN = 10
+
 
 def initialize_instances():
     """Read the abalone.txt CSV data into a list of instances."""
@@ -53,7 +50,7 @@ def initialize_instances():
     return instances
 
 
-def train(oa, network, oaName, train_set, test_set, measure, max_iterations=TRAINING_ITERATIONS):
+def train(oa, network, oaName, train_set, test_set, measure, population_size):
     """Train a given network on a set of instances.
 
     :param OptimizationAlgorithm oa:
@@ -66,11 +63,11 @@ def train(oa, network, oaName, train_set, test_set, measure, max_iterations=TRAI
     train_instances = train_set.getInstances()
     test_instances = test_set.getInstances()
 
-    fname = 'out/error/%s.csv' % (oaName)
+    fname = 'out/ga/population-%d.csv' % (population_size)
 
     with open(fname, 'w') as f:
         # print "\nError results for %s\n---------------------------" % (oaName,)
-        for iteration in xrange(max_iterations):
+        for iteration in xrange(TRAINING_ITERATIONS):
             oa.train()
 
             train_error = test_error = 0.00
@@ -113,47 +110,45 @@ def main():
 
     hidden_layer_size = HIDDEN_LAYER
 
-    networks = []  # BackPropagationNetwork
-    nnop = []  # NeuralNetworkOptimizationProblem
-    oa = []  # OptimizationAlgorithm
-    oa_names = ["RHC", "SA", "GA"]
+    # for _hidden_layer in xrange(HIDDEN_LAYER):
+        # hidden_layer_size = _hidden_layer + 1
+
+    network = None  # BackPropagationNetwork
+    nnop = None  # NeuralNetworkOptimizationProblem
+    oa = None  # OptimizationAlgorithm
     results = ""
 
-    RandomOrderFilter().filter(data_set)
-    train_test_split = TestTrainSplitFilter(TRAIN_TEST_SPLIT)
-    train_test_split.filter(data_set)
+    for population_size in [100, 200, 400]:
+        RandomOrderFilter().filter(data_set)
+        train_test_split = TestTrainSplitFilter(TRAIN_TEST_SPLIT)
+        train_test_split.filter(data_set)
 
-    train_set = train_test_split.getTrainingSet()
-    test_set = train_test_split.getTestingSet()
+        train_set = train_test_split.getTrainingSet()
+        test_set = train_test_split.getTestingSet()
 
-    for name in oa_names:
-        classification_network = factory.createClassificationNetwork([INPUT_LAYER, hidden_layer_size, OUTPUT_LAYER])
-        networks.append(classification_network)
-        nnop.append(NeuralNetworkOptimizationProblem(train_set, classification_network, measure))
+        network = factory.createClassificationNetwork([INPUT_LAYER, hidden_layer_size, OUTPUT_LAYER])
+        nnop = NeuralNetworkOptimizationProblem(train_set, network, measure)
 
-    oa.append(RandomizedHillClimbing(nnop[0]))
-    oa.append(SimulatedAnnealing(SA_START_TEMPERATURE, SA_COOLING, nnop[1]))
-    oa.append(StandardGeneticAlgorithm(GA_POPULATION_SIZE, GA_MATE_EACH_GEN, GA_MUTATE_EACH_GEN, nnop[2]))
+        oa = StandardGeneticAlgorithm(population_size, GA_MATE_EACH_GEN, GA_MUTATE_EACH_GEN, nnop)
 
-    for i, name in enumerate(oa_names):
         start = time.time()
         correct = 0
         incorrect = 0
 
-        train(oa[i], networks[i], oa_names[i], train_set, test_set, measure, max_iterations=max_iterations)
+        train(oa, network, "GA", train_set, test_set, measure, population_size)
         end = time.time()
         training_time = end - start
 
-        optimal_instance = oa[i].getOptimal()
-        networks[i].setWeights(optimal_instance.getData())
+        optimal_instance = oa.getOptimal()
+        network.setWeights(optimal_instance.getData())
 
         start = time.time()
         for instance in test_set.getInstances():
-            networks[i].setInputValues(instance.getData())
-            networks[i].run()
+            network.setInputValues(instance.getData())
+            network.run()
 
             predicted = instance.getLabel().getContinuous()
-            actual = networks[i].getOutputValues().get(0)
+            actual = network.getOutputValues().get(0)
 
             if abs(predicted - actual) < 0.5:
                 correct += 1
@@ -164,13 +159,13 @@ def main():
         testing_time = end - start
 
         _results = ""
-        _results += "\n[%s] hidden_layer=%d, iterations=%d" % (name, hidden_layer_size, max_iterations)
-        _results += "\nResults for %s: \nCorrectly classified %d instances." % (name, correct)
+        _results += "\n[GA] population=%0.02f" % (population_size)
+        _results += "\nResults for GA: \nCorrectly classified %d instances." % (correct)
         _results += "\nIncorrectly classified %d instances.\nPercent correctly classified: %0.03f%%" % (incorrect, float(correct)/(correct+incorrect)*100.0)
         _results += "\nTraining time: %0.03f seconds" % (training_time,)
         _results += "\nTesting time: %0.03f seconds\n" % (testing_time,)
 
-        with open('out/log/%s.log' % (oa_names[i]), 'w') as f:
+        with open('out/ga/population-%d.log' % (population_size), 'w') as f:
             f.write(_results)
 
         results += _results

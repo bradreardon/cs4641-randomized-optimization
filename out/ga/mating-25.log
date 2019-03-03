@@ -1,8 +1,8 @@
 
-[RHC] hidden_layer=5, iterations=1000
-Results for RHC: 
+[GA] mating=25.00
+Results for GA: 
 Correctly classified 129 instances.
 Incorrectly classified 8 instances.
 Percent correctly classified: 94.161%
-Training time: 9.354 seconds
+Training time: 16.944 seconds
 Testing time: 0.002 seconds
