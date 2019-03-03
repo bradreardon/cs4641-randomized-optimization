@@ -47,7 +47,7 @@ def initialize_instances():
     return instances
 
 
-def train(oa, network, oaName, train_set, test_set, measure, max_iterations=TRAINING_ITERATIONS):
+def train(oa, network, oaName, train_set, test_set, measure, restarts):
     """Train a given network on a set of instances.
 
     :param OptimizationAlgorithm oa:
@@ -60,11 +60,14 @@ def train(oa, network, oaName, train_set, test_set, measure, max_iterations=TRAI
     train_instances = train_set.getInstances()
     test_instances = test_set.getInstances()
 
-    fname = 'out/error/%s.csv' % (oaName)
+    fname = 'out/rhc/restarts-%d.csv' % (restarts)
 
     with open(fname, 'w') as f:
         # print "\nError results for %s\n---------------------------" % (oaName,)
-        for iteration in xrange(max_iterations):
+        for iteration in xrange(TRAINING_ITERATIONS):
+            if iteration % (TRAINING_ITERATIONS / restarts if restarts == 0 else 1) == 1:
+                oa.restart()
+
             oa.train()
 
             train_error = test_error = 0.00
@@ -87,13 +90,16 @@ def train(oa, network, oaName, train_set, test_set, measure, max_iterations=TRAI
                 example = Instance(output_values, Instance(output_values.get(0)))
                 test_error += measure.value(output, example)
 
-            f.write("%d,%0.05f,%0.05f\n" % (iteration,train_error,test_error))
+            train_error_norm = train_error / len(train_instances)
+            test_error_norm = test_error / len(test_instances)
+
+            f.write("%d,%0.05f,%0.05f\n" % (iteration,train_error_norm,test_error_norm))
 
     print('Error written to %s' % (fname))
 
 
 def main():
-    """Run algorithms on the abalone dataset."""
+    """Run algorithms on the cancer dataset."""
 
     instances = initialize_instances()
     factory = BackPropagationNetworkFactory()
@@ -107,47 +113,42 @@ def main():
     # for _hidden_layer in xrange(HIDDEN_LAYER):
         # hidden_layer_size = _hidden_layer + 1
 
-    networks = []  # BackPropagationNetwork
-    nnop = []  # NeuralNetworkOptimizationProblem
-    oa = []  # OptimizationAlgorithm
-    oa_names = ["RHC", "SA", "GA"]
+    network = None  # BackPropagationNetwork
+    nnop = None  # NeuralNetworkOptimizationProblem
+    oa = None  # OptimizationAlgorithm
     results = ""
 
-    RandomOrderFilter().filter(data_set)
-    train_test_split = TestTrainSplitFilter(TRAIN_TEST_SPLIT)
-    train_test_split.filter(data_set)
+    for restarts in xrange(1, 11):
+        RandomOrderFilter().filter(data_set)
+        train_test_split = TestTrainSplitFilter(TRAIN_TEST_SPLIT)
+        train_test_split.filter(data_set)
 
-    train_set = train_test_split.getTrainingSet()
-    test_set = train_test_split.getTestingSet()
+        train_set = train_test_split.getTrainingSet()
+        test_set = train_test_split.getTestingSet()
 
-    for name in oa_names:
-        classification_network = factory.createClassificationNetwork([INPUT_LAYER, hidden_layer_size, OUTPUT_LAYER])
-        networks.append(classification_network)
-        nnop.append(NeuralNetworkOptimizationProblem(train_set, classification_network, measure))
+        network = factory.createClassificationNetwork([INPUT_LAYER, hidden_layer_size, OUTPUT_LAYER])
+        nnop = NeuralNetworkOptimizationProblem(train_set, network, measure)
 
-    oa.append(RandomizedHillClimbing(nnop[0]))
-    oa.append(SimulatedAnnealing(1E11, .95, nnop[1]))
-    oa.append(StandardGeneticAlgorithm(200, 100, 10, nnop[2]))
+        oa = RandomizedHillClimbing(nnop)
 
-    for i, name in enumerate(oa_names):
         start = time.time()
         correct = 0
         incorrect = 0
 
-        train(oa[i], networks[i], oa_names[i], train_set, test_set, measure, max_iterations=max_iterations)
+        train(oa, network, "RHC", train_set, test_set, measure, restarts)
         end = time.time()
         training_time = end - start
 
-        optimal_instance = oa[i].getOptimal()
-        networks[i].setWeights(optimal_instance.getData())
+        optimal_instance = oa.getOptimal()
+        network.setWeights(optimal_instance.getData())
 
         start = time.time()
         for instance in test_set.getInstances():
-            networks[i].setInputValues(instance.getData())
-            networks[i].run()
+            network.setInputValues(instance.getData())
+            network.run()
 
             predicted = instance.getLabel().getContinuous()
-            actual = networks[i].getOutputValues().get(0)
+            actual = network.getOutputValues().get(0)
 
             if abs(predicted - actual) < 0.5:
                 correct += 1
@@ -158,13 +159,13 @@ def main():
         testing_time = end - start
 
         _results = ""
-        _results += "\n[%s] hidden_layer=%d, iterations=%d" % (name, hidden_layer_size, max_iterations)
-        _results += "\nResults for %s: \nCorrectly classified %d instances." % (name, correct)
+        _results += "\n[RHC] restarts=%d" % (restarts)
+        _results += "\nResults for RHC: \nCorrectly classified %d instances." % (correct)
         _results += "\nIncorrectly classified %d instances.\nPercent correctly classified: %0.03f%%" % (incorrect, float(correct)/(correct+incorrect)*100.0)
         _results += "\nTraining time: %0.03f seconds" % (training_time,)
         _results += "\nTesting time: %0.03f seconds\n" % (testing_time,)
 
-        with open('out/log/%s.log' % (oa_names[i]), 'w') as f:
+        with open('out/rhc/restarts-%d.log' % (restarts), 'w') as f:
             f.write(_results)
 
         results += _results

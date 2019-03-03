@@ -1,8 +1,8 @@
 
 [GA] hidden_layer=5, iterations=1000
 Results for GA: 
-Correctly classified 132 instances.
-Incorrectly classified 5 instances.
-Percent correctly classified: 96.350%
-Training time: 35.568 seconds
-Testing time: 0.009 seconds
+Correctly classified 131 instances.
+Incorrectly classified 6 instances.
+Percent correctly classified: 95.620%
+Training time: 34.548 seconds
+Testing time: 0.001 seconds
