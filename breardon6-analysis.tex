@@ -37,12 +37,12 @@
   \subsection{Breast Cancer Wisconsin data set}
   The Breast Cancer Wisconsin data set was donated to the UCI Machine Learning Repository in 1992, and contains data from one doctor's clinical cases, gathered from January 1989 to November 1991. In total, there are 699 instances signifying information about breast tumors such as clump thickness, uniformity in shape and size, and other screening factors. Data points are identified by two classes -- benign or malignant. The features of the data points are encoded as 9 continuous attributes rating the screening factor from 1 to 10.
 
-  This data set contains unknowns in the form of question marks in the data. To deal with this, missing values were imputed, calculating missing data points based on the mean of other points in the specific column of the missing attribute. 
+  This data set contains unknowns in the form of question marks in the data. Due to the nature of the implementations in ABAGAIL, these 16 data points containing unknowns were stripped from the data set. Therefore, the set used for this report contains 683 instances.
 
   The problem at hand for this data set is determining whether a tumor is benign or malignant based on tumor screening characteristics identified in the data set.
 
   \textbf{Source:} https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\%28Original\%29
 
-    
+
 
 \end{document}

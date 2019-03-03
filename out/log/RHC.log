@@ -1,0 +1,8 @@
+
+[RHC] hidden_layer=5, iterations=1000
+Results for RHC: 
+Correctly classified 131 instances.
+Incorrectly classified 6 instances.
+Percent correctly classified: 95.620%
+Training time: 9.026 seconds
+Testing time: 0.016 seconds
