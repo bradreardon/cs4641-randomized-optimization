@@ -268,7 +268,21 @@
     \subsection{Genetic Algorithm: Traveling Salesman}
       The traveling salesman problem is an NP-hard problem that deals with the problem of a salesman traveling from city to city, and returning to their origin city. The goal is to find the shortest route to do so, given a list of cities and the distances between them. The metaphor for this problem extends to many real-world applications, especially in the area of logistics, making it a very interesting problem in the area of optimization.
 
-      TODO params
+      \Fref{tab:ts-params} shows the parameters used for each algorithm.
+
+      \begin{table}[h!]
+      \centering
+        \begin{tabular}{||c|c||}\hline
+          \textbf{Algorithm} & \textbf{Parameters} \\ \hline
+          Randomized Hill Climbing & N/A \\ \hline
+          Simulated Annealing & temperature=\num{1e12}, cooling\_rate=.999 \\ \hline
+          Genetic Algorithm & population=2000, mate=1500, mutate=250 \\ \hline
+          MIMIC & samples=500, keep=100 \\ \hline
+        \end{tabular}
+
+        \caption{Parameters used for the traveling salesman problem}
+        \label{tab:ts-params}
+      \end{table}
 
       \Fref{fig:fitness-ts} shows the fitness curve for this optimization problem, comparing the fitness over 5000 iterations for all four algorithms.
 
@@ -282,6 +296,23 @@
       The genetic algorithm quickly reaches a limit of maximum fitness that majorly outperforms MIMIC and simulated annealing for the traveling salesman problem.
 
     \subsection{Simulated Annealing: Flip Flop}
+      TODO algo talk
+
+      \Fref{tab:ff-params} shows the parameters used for each algorithm.
+
+      \begin{table}[h!]
+      \centering
+        \begin{tabular}{||c|c||}\hline
+          \textbf{Algorithm} & \textbf{Parameters} \\ \hline
+          Randomized Hill Climbing & N/A \\ \hline
+          Simulated Annealing & temperature=\num{1e11}, cooling\_rate=.95 \\ \hline
+          Genetic Algorithm & population=200, mate=100, mutate=10 \\ \hline
+          MIMIC & samples=200, keep=20 \\ \hline
+        \end{tabular}
+
+        \caption{Parameters used for the flip flop problem}
+        \label{tab:ff-params}
+      \end{table}
 
       \Fref{fig:fitness-ff}
 
@@ -293,6 +324,23 @@
       \end{figure}
 
     \subsection{MIMIC: Four Peaks}
+      TODO algo talk
+
+      \Fref{tab:fp-params} shows the parameters used for each algorithm.
+
+      \begin{table}[h!]
+      \centering
+        \begin{tabular}{||c|c||}\hline
+          \textbf{Algorithm} & \textbf{Parameters} \\ \hline
+          Randomized Hill Climbing & N/A \\ \hline
+          Simulated Annealing & temperature=\num{1e11}, cooling\_rate=.95 \\ \hline
+          Genetic Algorithm & population=200, mate=100, mutate=10 \\ \hline
+          MIMIC & samples=200, keep=20 \\ \hline
+        \end{tabular}
+
+        \caption{Parameters used for the four peaks problem}
+        \label{tab:fp-params}
+      \end{table}
 
       \Fref{fig:fitness-fp}
 
