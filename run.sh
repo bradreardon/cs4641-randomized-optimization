@@ -26,27 +26,6 @@ mkdir -p out/op/{countones,fourpeaks,salesman,flipflop}
 
 
 
-# echo "test count ones (?)"
-# jython randomized_optimization/op_countones.py
-
-echo "test flip flop (SA)"
-jython randomized_optimization/op_flipflop.py
-
-echo "test four peaks (MIMIC)"
-jython randomized_optimization/op_fourpeaks.py
-
-echo "test traveling salesman (GA)"
-jython randomized_optimization/op_travelingsalesman.py
-
-
-# echo "plotting optimization problems"
-# python plot_scripts/plot_op_fitness.py "Count Ones" countones out/op/countones/fitness.png 5000
-python plot_scripts/plot_op_fitness.py "Flip Flop" flipflop out/op/flipflop/fitness.png 5000
-python plot_scripts/plot_op_fitness.py "Four Peaks" fourpeaks out/op/fourpeaks/fitness.png 5000
-python plot_scripts/plot_op_fitness.py "Traveling Salesman" salesman out/op/salesman/fitness.png 5000
-
-
-
 # echo "plotting learning curves"
 # python plot_scripts/plot_learning.py "Randomized Hill Climbing" out/error/RHC.csv out/plot/RHC.png
 # python plot_scripts/plot_learning.py "Simulated Annealing" out/error/SA.csv out/plot/SA.png
@@ -69,3 +48,25 @@ python plot_scripts/plot_op_fitness.py "Traveling Salesman" salesman out/op/sale
 
 # echo "plotting GA mutation"
 # python plot_scripts/plot_ga_mutation.py
+
+
+
+# echo "test count ones (?)"
+# jython randomized_optimization/op_countones.py
+
+# echo "test flip flop (SA)"
+# jython randomized_optimization/op_flipflop.py
+
+# echo "test four peaks (MIMIC)"
+# jython randomized_optimization/op_fourpeaks.py
+
+# echo "test traveling salesman (GA)"
+# jython randomized_optimization/op_travelingsalesman.py
+
+
+
+# echo "plotting optimization problems"
+# python plot_scripts/plot_op_fitness.py "Count Ones" countones out/op/countones/fitness.png 5000
+# python plot_scripts/plot_op_fitness.py "Flip Flop" flipflop out/op/flipflop/fitness.png 5000
+# python plot_scripts/plot_op_fitness.py "Four Peaks" fourpeaks out/op/fourpeaks/fitness.png 5000
+# python plot_scripts/plot_op_fitness.py "Traveling Salesman" salesman out/op/salesman/fitness.png 5000

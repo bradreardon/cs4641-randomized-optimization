@@ -19,7 +19,7 @@ Requirements
 
 Running
 
-    All commands used to run this project can be found commented in run.sh. Each command is annotated with an echo command describing what function it runs.
+    All commands used to run this project, for both running algorithms and plotting, can be found commented in run.sh. Each command is annotated with an echo command describing what function it runs.
 
 Attribution
 
