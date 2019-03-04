@@ -47,9 +47,9 @@
   \section{Optimizing Neural Network Weights}
 
     \subsection{Introduction}
-      In this section, we will use implementations of the randomized hill climbing, simulated annealing, and genetic algorithms in the ABAGAIL source code provided along with the assignment to optimize the weights of a neural network. We will first focus on sensible parameter selection where required to determine an optimial configuration for each of the algorithms. Then, we will evaluate the performance of the algorithms both individually and collectively on the breast cancer data set used in the previous assignment.
+      In this section, we will use implementations of the randomized hill climbing, simulated annealing, and genetic algorithms in the ABAGAIL source code provided along with the assignment to optimize the weights of a neural network. We will first focus on sensible parameter selection, where required, to determine an optimal configuration for each of the algorithms. Then, we will evaluate the performance of the algorithms both individually and collectively on the breast cancer data set used in the previous assignment.
 
-      To minimize the amount of variables when comparing the algorithms against each other, the underlying neural network for each configuration used 1000 training iterations with 5 nodes in the hidden layer. This allows the following sections to focus only on hyperparameter tuning and the performance of each algorithm.
+      To minimize the amount of variables when comparing the algorithms against each other, the underlying neural network for each configuration used 1000 training iterations with 5 nodes in the hidden layer. This allows the following sections to focus only on hyper parameter tuning and the performance of each algorithm.
 
       \subsubsection{Breast Cancer Wisconsin data set}
         The Breast Cancer Wisconsin data set was donated to the UCI Machine Learning Repository in 1992, and contains data from one doctor's clinical cases, gathered from January 1989 to November 1991. Due to the nature of the implementations in ABAGAIL, 16 data points containing unknowns were removed from the set. Therefore, the set used for this report contains 683 instances. Further metadata about the set can be found in the project source code, or at the link below.
@@ -102,7 +102,7 @@
     \subsection{Simulated Annealing}
 
       \subsubsection{Parameter selection}
-        Simulated annealing, as implemented in ABAGAIL, exposes two hyperparameters: the cooling rate, and the starting temperature. The starting temperature used initially by ABAGAIL was $T = \num{1e11}$, which was sufficient for use, as the cooling rate of the algorithm has a much larger effect on the search. Therefore, the cooling rate was tested at six different values to find the best-performing annealing algorithm after 1000 iterations.
+        Simulated annealing, as implemented in ABAGAIL, exposes two hyper parameters: the cooling rate, and the starting temperature. The starting temperature used initially by ABAGAIL was $T = \num{1e11}$, which was sufficient for use, as the cooling rate of the algorithm has a much larger effect on the search. Therefore, the cooling rate was tested at six different values to find the best-performing annealing algorithm after 1000 iterations.
 
         \begin{figure}[htb]
         \centering
@@ -280,7 +280,7 @@
           MIMIC & samples=500, keep=100 \\ \hline
         \end{tabular}
 
-        \caption{Parameters used for the traveling salesman problem}
+        \caption{Parameters used for testing the traveling salesman problem.}
         \label{tab:ts-params}
       \end{table}
 
@@ -314,7 +314,7 @@
           MIMIC & samples=200, keep=20 \\ \hline
         \end{tabular}
 
-        \caption{Parameters used for the four peaks problem}
+        \caption{Parameters used for testing the four peaks problem.}
         \label{tab:fp-params}
       \end{table}
 
@@ -330,9 +330,9 @@
       Unsurprisingly, randomized hill climbing and simulated annealing fail to impress for the four peaks problem. Genetic algorithms, interestingly, don't optimize the problem well either. MIMIC works particularly well for this problem space, as it samples the problem space uniformly in order to find candidates for maximum fitness, rather than localizing to a single maximum.
 
     \subsection{Simulated Annealing: Flip Flop}
-      The flip flop problem is relatively simple. The fitness evaluation function for this optimization problem has an input of bitstrings, and returns the number of times that digits alternate in the input string. Therefore, a global maximum on the fitness function would ideally be a string such as "10101010" which is entirely composed of alternating digits.
+      The flip flop problem is relatively simple. The fitness evaluation function for this optimization problem has an input of bit strings, and returns the number of times that digits alternate in the input string. Therefore, a global maximum on the fitness function would ideally be a string such as "10101010" which is entirely composed of alternating digits. Due to the nature of this problem space, it contains many local extrema for a more naive algorithm to potentially get stuck on.
 
-      \Fref{tab:ff-params} shows the parameters used for each algorithm. The flip flop problem was evaluated with 80-length bitstrings.
+      \Fref{tab:ff-params} shows the parameters used for each algorithm. The flip flop problem was evaluated with 80-length bit strings.
 
       \begin{table}[h!]
       \centering
@@ -344,7 +344,7 @@
           MIMIC & samples=200, keep=20 \\ \hline
         \end{tabular}
 
-        \caption{Parameters used for the flip flop problem}
+        \caption{Parameters used for testing the flip flop problem.}
         \label{tab:ff-params}
       \end{table}
 
@@ -357,12 +357,20 @@
       \label{fig:fitness-ff}
       \end{figure}
 
-      TODO but why did SA do well?
+      In the end, all algorithms except for randomized hill climbing performed well for the flip flop problem after 5000 iterations. Notably, simulated annealing pulled ahead to first place in the last 1000 iterations. This can be explained by the fact that the problem space is riddled with local extrema -- simulated annealing over time randomly selects similarly optimal solutions to the current ``best'' solution, which allows it to ``unstick'' itself from a local maximum and explore other parts of the problem space.
 
     \subsection{Discussion}
-      TODO
+      Each of the algorithms evaluated in this section have their own merits, allowing them to tackle vastly different problem spaces. None of the problems described had simple problem spaces with one single maximum, which is illustrated by the fact that randomized hill climbing was generally outperformed by other algorithms.
+
+      Overall, MIMIC seemed to have good performance overall, suggesting that with further parameter tweaking, it may function well in a large number of problem spaces, despite its long computation time.
 
   \section{Conclusion}
-    TODO
+    In this report, we've explored the strengths and weaknesses of the randomized hill climbing, simulated annealing, genetic, and MIMIC algorithms in the context of weight optimization for a neural network, as well as for classic optimization problems.
+
+    Despite the overall computational time required to use the generic algorithm, it functioned extremely well for our real-world cancer data set, quickly picking up relationships between the attributes of the problem space. Hill climbing techniques also functioned well after enough iterations, so further analysis may reveal more distinct differences between the two with unseen data. However, these tuned randomized optimization algorithms already functioned well for weight optimization as-is.
+
+    Evaluating the four algorithms in the context of optimization problems also allowed us to explore how the algorithms performed in various discrete problem spaces. Here, MIMIC seemed to work very well due to its uniform sampling of the problem space. However, with enough compute time, other algorithms such as simulated annealing did still perform well, even for problem spaces with many extrema.
+
+    In closing, randomized optimization algorithms are extremely effective in a plethora of problem spaces. However, the question remains as to whether or not randomized weight optimization is superior to standard neural network back-propagation for real-world use cases. 
 
 \end{document}
